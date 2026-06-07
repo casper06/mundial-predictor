@@ -1,6 +1,5 @@
 __pycache__/
 *.pyc
-data/raw/shootouts.csv
 data/processed/*
 data/context/*
 .venv/
