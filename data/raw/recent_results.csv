@@ -1,0 +1,149 @@
+date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
+2025-03-20,Netherlands,Spain,2,2,UEFA Nations League,Rotterdam,Netherlands,FALSE
+2025-03-20,Croatia,France,2,0,UEFA Nations League,Split,Croatia,FALSE
+2025-03-20,Denmark,Portugal,1,0,UEFA Nations League,Copenhagen,Denmark,FALSE
+2025-03-20,Italy,Germany,1,2,UEFA Nations League,Milan,Italy,FALSE
+2025-03-23,Spain,Netherlands,3,3,UEFA Nations League,Valencia,Spain,FALSE
+2025-03-23,France,Croatia,2,0,UEFA Nations League,Paris,France,FALSE
+2025-03-23,Portugal,Denmark,5,2,UEFA Nations League,Lisbon,Portugal,FALSE
+2025-03-23,Germany,Italy,3,3,UEFA Nations League,Dortmund,Germany,FALSE
+2025-06-04,Germany,Portugal,1,2,UEFA Nations League,Munich,Germany,TRUE
+2025-06-05,Spain,France,5,4,UEFA Nations League,Stuttgart,Germany,TRUE
+2025-06-08,Germany,France,0,2,UEFA Nations League,Stuttgart,Germany,TRUE
+2025-06-08,Portugal,Spain,2,2,UEFA Nations League,Munich,Germany,TRUE
+2026-06-06,United States,Germany,1,2,Friendly,Chicago,United States,FALSE
+2026-06-06,Argentina,Honduras,2,0,Friendly,College Station,United States,TRUE
+2024-11-19,Bolivia,Paraguay,2,2,FIFA World Cup qualification,La Paz,Bolivia,FALSE
+2024-11-19,Colombia,Ecuador,0,1,FIFA World Cup qualification,Barranquilla,Colombia,FALSE
+2024-11-19,Argentina,Peru,1,0,FIFA World Cup qualification,Buenos Aires,Argentina,FALSE
+2024-11-19,Chile,Venezuela,4,2,FIFA World Cup qualification,Santiago,Chile,FALSE
+2024-11-19,Brazil,Uruguay,1,1,FIFA World Cup qualification,Salvador,Brazil,FALSE
+2025-03-20,Paraguay,Chile,1,0,FIFA World Cup qualification,Asuncion,Paraguay,FALSE
+2025-03-20,Brazil,Colombia,2,1,FIFA World Cup qualification,Brasilia,Brazil,FALSE
+2025-03-20,Peru,Bolivia,3,1,FIFA World Cup qualification,Lima,Peru,FALSE
+2025-03-21,Ecuador,Venezuela,2,1,FIFA World Cup qualification,Quito,Ecuador,FALSE
+2025-03-21,Uruguay,Argentina,0,1,FIFA World Cup qualification,Montevideo,Uruguay,FALSE
+2025-03-25,Argentina,Brazil,4,1,FIFA World Cup qualification,Buenos Aires,Argentina,FALSE
+2025-03-25,Bolivia,Uruguay,0,0,FIFA World Cup qualification,La Paz,Bolivia,FALSE
+2025-03-25,Chile,Ecuador,0,0,FIFA World Cup qualification,Santiago,Chile,FALSE
+2025-03-25,Venezuela,Peru,1,0,FIFA World Cup qualification,Maturin,Venezuela,FALSE
+2025-03-25,Colombia,Paraguay,2,2,FIFA World Cup qualification,Barranquilla,Colombia,FALSE
+2025-06-05,Paraguay,Uruguay,2,0,FIFA World Cup qualification,Asuncion,Paraguay,FALSE
+2025-06-05,Ecuador,Brazil,0,0,FIFA World Cup qualification,Guayaquil,Ecuador,FALSE
+2025-06-05,Chile,Argentina,0,1,FIFA World Cup qualification,Santiago,Chile,FALSE
+2025-06-06,Colombia,Peru,0,0,FIFA World Cup qualification,Barranquilla,Colombia,FALSE
+2025-06-06,Venezuela,Bolivia,2,0,FIFA World Cup qualification,Maturin,Venezuela,FALSE
+2025-06-10,Bolivia,Chile,2,0,FIFA World Cup qualification,El Alto,Bolivia,FALSE
+2025-06-10,Uruguay,Venezuela,2,0,FIFA World Cup qualification,Montevideo,Uruguay,FALSE
+2025-06-10,Argentina,Colombia,1,1,FIFA World Cup qualification,Buenos Aires,Argentina,FALSE
+2025-06-10,Brazil,Paraguay,1,0,FIFA World Cup qualification,Sao Paulo,Brazil,FALSE
+2025-06-10,Peru,Ecuador,0,0,FIFA World Cup qualification,Lima,Peru,FALSE
+2025-09-04,Paraguay,Ecuador,0,0,FIFA World Cup qualification,Asuncion,Paraguay,FALSE
+2025-09-04,Argentina,Venezuela,3,0,FIFA World Cup qualification,Buenos Aires,Argentina,FALSE
+2025-09-04,Uruguay,Peru,3,0,FIFA World Cup qualification,Montevideo,Uruguay,FALSE
+2025-09-04,Colombia,Bolivia,3,0,FIFA World Cup qualification,Barranquilla,Colombia,FALSE
+2025-09-04,Brazil,Chile,3,0,FIFA World Cup qualification,Rio de Janeiro,Brazil,FALSE
+2025-09-09,Ecuador,Argentina,1,0,FIFA World Cup qualification,Guayaquil,Ecuador,FALSE
+2025-09-09,Venezuela,Colombia,3,6,FIFA World Cup qualification,Maturin,Venezuela,FALSE
+2025-09-09,Chile,Uruguay,0,0,FIFA World Cup qualification,Santiago,Chile,FALSE
+2025-09-09,Bolivia,Brazil,1,0,FIFA World Cup qualification,El Alto,Bolivia,FALSE
+2025-09-09,Peru,Paraguay,0,1,FIFA World Cup qualification,Lima,Peru,FALSE
+2025-09-05,Ukraine,France,0,2,FIFA World Cup qualification,Wroclaw,Poland,TRUE
+2025-09-05,Iceland,Azerbaijan,5,0,FIFA World Cup qualification,Reykjavik,Iceland,FALSE
+2025-09-05,Switzerland,Kosovo,4,0,FIFA World Cup qualification,Basel,Switzerland,FALSE
+2025-09-05,Slovenia,Sweden,2,2,FIFA World Cup qualification,Ljubljana,Slovenia,FALSE
+2025-09-06,Armenia,Portugal,0,5,FIFA World Cup qualification,Yerevan,Armenia,FALSE
+2025-09-06,England,Andorra,2,0,FIFA World Cup qualification,London,England,FALSE
+2025-09-06,Austria,Cyprus,1,0,FIFA World Cup qualification,Vienna,Austria,FALSE
+2025-09-07,Lithuania,Netherlands,2,3,FIFA World Cup qualification,Kaunas,Lithuania,FALSE
+2025-09-07,Belgium,Kazakhstan,6,0,FIFA World Cup qualification,Brussels,Belgium,FALSE
+2025-09-07,Germany,Northern Ireland,3,1,FIFA World Cup qualification,Cologne,Germany,FALSE
+2025-09-07,Turkey,Spain,0,6,FIFA World Cup qualification,Konya,Turkey,FALSE
+2025-09-08,Croatia,Montenegro,4,0,FIFA World Cup qualification,Zagreb,Croatia,FALSE
+2025-09-08,Switzerland,Slovenia,3,0,FIFA World Cup qualification,Basel,Switzerland,FALSE
+2025-09-09,Azerbaijan,Ukraine,1,1,FIFA World Cup qualification,Baku,Azerbaijan,FALSE
+2025-09-09,France,Iceland,2,1,FIFA World Cup qualification,Paris,France,FALSE
+2025-09-09,Hungary,Portugal,2,3,FIFA World Cup qualification,Budapest,Hungary,FALSE
+2025-09-09,Serbia,England,0,5,FIFA World Cup qualification,Belgrade,Serbia,FALSE
+2025-10-10,France,Azerbaijan,3,0,FIFA World Cup qualification,Paris,France,FALSE
+2025-10-10,Germany,Luxembourg,4,0,FIFA World Cup qualification,Sinsheim,Germany,FALSE
+2025-10-10,Iceland,Ukraine,3,5,FIFA World Cup qualification,Reykjavik,Iceland,FALSE
+2025-10-10,Sweden,Switzerland,0,2,FIFA World Cup qualification,Stockholm,Sweden,FALSE
+2025-10-11,Portugal,Ireland,1,0,FIFA World Cup qualification,Lisbon,Portugal,FALSE
+2025-10-11,Spain,Georgia,2,0,FIFA World Cup qualification,Elche,Spain,FALSE
+2025-10-12,Netherlands,Finland,4,0,FIFA World Cup qualification,Amsterdam,Netherlands,FALSE
+2025-10-12,Croatia,Gibraltar,3,0,FIFA World Cup qualification,Varazdin,Croatia,FALSE
+2025-10-13,Iceland,France,2,2,FIFA World Cup qualification,Reykjavik,Iceland,FALSE
+2025-10-13,Northern Ireland,Germany,0,1,FIFA World Cup qualification,Belfast,Northern Ireland,FALSE
+2025-11-13,Azerbaijan,Iceland,0,2,FIFA World Cup qualification,Baku,Azerbaijan,FALSE
+2025-11-13,England,Serbia,2,0,FIFA World Cup qualification,London,England,FALSE
+2025-11-13,France,Ukraine,4,0,FIFA World Cup qualification,Paris,France,FALSE
+2025-11-13,Ireland,Portugal,2,0,FIFA World Cup qualification,Dublin,Ireland,FALSE
+2025-11-14,Croatia,Faroe Islands,3,1,FIFA World Cup qualification,Rijeka,Croatia,FALSE
+2025-11-16,Azerbaijan,France,1,3,FIFA World Cup qualification,Baku,Azerbaijan,FALSE
+2025-11-16,Ukraine,Iceland,2,0,FIFA World Cup qualification,Warsaw,Poland,TRUE
+2025-03-22,Moldova,Norway,0,5,FIFA World Cup qualification,Chisinau,Moldova,FALSE
+2025-03-25,Israel,Norway,2,4,FIFA World Cup qualification,Debrecen,Hungary,TRUE
+2025-06-06,Norway,Italy,3,0,FIFA World Cup qualification,Oslo,Norway,FALSE
+2025-06-09,Estonia,Norway,0,1,FIFA World Cup qualification,Tallinn,Estonia,FALSE
+2025-09-04,Norway,Finland,1,0,FIFA World Cup qualification,Oslo,Norway,FALSE
+2025-09-09,Norway,Moldova,11,1,FIFA World Cup qualification,Oslo,Norway,FALSE
+2025-10-11,Norway,Israel,5,0,FIFA World Cup qualification,Oslo,Norway,FALSE
+2025-11-13,Norway,Estonia,4,1,FIFA World Cup qualification,Oslo,Norway,FALSE
+2025-11-16,Italy,Norway,1,4,FIFA World Cup qualification,Milan,Italy,FALSE
+2025-09-05,Denmark,Scotland,0,0,FIFA World Cup qualification,Copenhagen,Denmark,FALSE
+2025-09-08,Belarus,Scotland,0,2,FIFA World Cup qualification,Zalaegerszeg,Hungary,TRUE
+2025-10-09,Scotland,Greece,3,1,FIFA World Cup qualification,Glasgow,Scotland,FALSE
+2025-10-12,Scotland,Belarus,2,1,FIFA World Cup qualification,Glasgow,Scotland,FALSE
+2025-11-15,Greece,Scotland,3,2,FIFA World Cup qualification,Athens,Greece,FALSE
+2025-11-18,Scotland,Denmark,4,2,FIFA World Cup qualification,Glasgow,Scotland,FALSE
+2026-05-26,Morocco,Burundi,5,0,Friendly,Sale,Morocco,FALSE
+2026-05-28,Egypt,Russia,1,0,Friendly,Cairo,Egypt,FALSE
+2026-05-29,Iran,Gambia,0,0,Friendly,Antalya,Turkey,TRUE
+2026-05-29,Iraq,Andorra,1,0,Friendly,Girona,Spain,TRUE
+2026-05-29,South Africa,Nicaragua,0,0,Friendly,Johannesburg,South Africa,FALSE
+2026-05-29,Bosnia and Herzegovina,North Macedonia,0,0,Friendly,Sarajevo,Bosnia and Herzegovina,FALSE
+2026-05-30,Scotland,Curaçao,4,1,Friendly,Glasgow,Scotland,FALSE
+2026-05-30,Ecuador,Saudi Arabia,2,1,Friendly,Harrison,United States,TRUE
+2026-05-30,Korea Republic,Trinidad and Tobago,5,0,Friendly,Seúl,South Korea,FALSE
+2026-05-30,Mexico,Australia,1,0,Friendly,Pasadena,United States,TRUE
+2026-05-31,Japan,Iceland,1,0,Friendly,Tokio,Japan,FALSE
+2026-05-31,Switzerland,Jordan,4,1,Friendly,St. Gallen,Switzerland,FALSE
+2026-05-31,Czech Republic,Kosovo,2,1,Friendly,Praga,Czech Republic,FALSE
+2026-05-31,Cape Verde,Serbia,3,0,Friendly,Lisbon,Portugal,TRUE
+2026-05-31,Germany,Finland,4,0,Friendly,Mainz,Germany,FALSE
+2026-05-31,United States,Senegal,3,2,Friendly,Charlotte,United States,FALSE
+2026-05-31,Brazil,Panama,6,2,Friendly,Rio de Janeiro,Brazil,FALSE
+2026-06-01,Norway,Sweden,3,1,Friendly,Oslo,Norway,FALSE
+2026-06-01,Turkey,North Macedonia,4,0,Friendly,Estambul,Turkey,FALSE
+2026-06-01,Austria,Tunisia,1,0,Friendly,Wien,Austria,FALSE
+2026-06-01,Colombia,Costa Rica,3,1,Friendly,Bogotá,Colombia,FALSE
+2026-06-01,Canada,Uzbekistan,2,0,Friendly,Edmonton,Canada,FALSE
+2026-06-02,Croatia,Belgium,0,2,Friendly,Rijeka,Croatia,FALSE
+2026-06-02,Morocco,Madagascar,4,0,Friendly,Rabat,Morocco,FALSE
+2026-06-02,Haiti,New Zealand,4,0,Friendly,Fort Lauderdale,United States,TRUE
+2026-06-03,DR Congo,Denmark,0,0,Friendly,Lieja,Belgium,TRUE
+2026-06-03,Netherlands,Algeria,0,1,Friendly,Rotterdam,Netherlands,FALSE
+2026-06-03,Panama,Dominican Republic,4,2,Friendly,Panama City,Panama,FALSE
+2026-06-03,Korea Republic,El Salvador,1,0,Friendly,Seúl,South Korea,FALSE
+2026-06-04,Iran,Mali,2,0,Friendly,Antalya,Turkey,TRUE
+2026-06-04,Sweden,Greece,2,2,Friendly,Estocolmo,Sweden,FALSE
+2026-06-04,Spain,Iraq,1,1,Friendly,La Coruña,Spain,FALSE
+2026-06-04,France,Côte d'Ivoire,1,2,Friendly,Nantes,France,FALSE
+2026-06-04,Mexico,Serbia,5,1,Friendly,Toluca,Mexico,FALSE
+2026-06-05,Paraguay,Nicaragua,4,0,Friendly,Asunción,Paraguay,FALSE
+2026-06-05,Saudi Arabia,Puerto Rico,3,0,Friendly,Austin,United States,TRUE
+2026-06-05,Canada,Republic of Ireland,1,1,Friendly,Montreal,Canada,FALSE
+2026-06-05,Haiti,Peru,1,2,Friendly,Miami,United States,TRUE
+2026-06-06,Belgium,Tunisia,5,0,Friendly,Brussels,Belgium,FALSE
+2026-06-06,Portugal,Chile,2,1,Friendly,Oeiras,Portugal,FALSE
+2026-06-06,United States,Germany,1,2,Friendly,Chicago,United States,FALSE
+2026-06-06,Panama,Bosnia and Herzegovina,1,1,Friendly,St. Louis,United States,TRUE
+2026-06-06,Switzerland,Australia,1,1,Friendly,San Diego,United States,TRUE
+2026-06-06,Bolivia,Scotland,0,4,Friendly,Harrison,United States,TRUE
+2026-06-06,England,New Zealand,1,0,Friendly,Tampa,United States,TRUE
+2026-06-06,Qatar,El Salvador,0,0,Friendly,Los Angeles,United States,TRUE
+2026-06-06,Brazil,Egypt,2,1,Friendly,Cleveland,United States,TRUE
+2026-06-06,Venezuela,Turkey,1,2,Friendly,Fort Lauderdale,United States,TRUE
+2026-06-06,Argentina,Honduras,2,0,Friendly,College Station,United States,TRUE
+2026-06-06,Curaçao,Aruba,4,0,Friendly,Willemstad,Curaçao,FALSE
