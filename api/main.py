@@ -44,6 +44,7 @@ GROUPS = {
     "K": ["Portugal", "DR Congo", "Uzbekistan", "Colombia"],
     "L": ["England", "Croatia", "Ghana", "Panama"],
 }
+
 # Host nation bonus: applied only when a team plays IN its own country.
 # Mexico is only "home" during the group stage (its venues); from the
 # knockouts onward Mexico plays in the USA and loses the bonus.
@@ -77,7 +78,8 @@ def host_bonus(team: str, host_country: str | None) -> float:
 # Map team -> group letter for quick lookup
 TEAM_GROUP = {team: g for g, teams in GROUPS.items() for team in teams}
 
-# ── App setup ───────────────────────────────────────────────────────────────
+
+# ── App setup ────────────────────────────────────────────────────────────────
 
 class AdjustedModel:
     """
@@ -85,31 +87,55 @@ class AdjustedModel:
     for specific teams. Does NOT modify the underlying model.
     Used for hypothetical scenarios (injuries, current form, etc.)
     """
-    def __init__(self, base_model, adjustments: dict[str, float]):
+    def __init__(self, base_model, adjustments: dict[str, float], chaos_factor: float = 0.0):
         self.base = base_model
         self.adjustments = adjustments
+        self.chaos_factor = chaos_factor  # 0.0 = pure model, 0.4 = maximum chaos
 
     def get_rating(self, team: str) -> float:
+        """Raw adjusted rating WITHOUT host bonus (used internally)."""
         return (self.base.get_rating(team)
-                + self.adjustments.get(team, 0.0)
-                + HOST_BONUS.get(team, 0.0))
+                + self.adjustments.get(team, 0.0))
 
-    @property
-    def elo(self):
-        return self.base.elo
+    def get_rating_with_bonus(self, team: str) -> float:
+        """Full rating including host bonus (used for display/rankings)."""
+        return self.get_rating(team) + HOST_BONUS.get(team, 0.0)
 
     def predict_match(self, home, away, neutral=False):
-        # Temporarily build prediction using adjusted ratings
+        """
+        Predict a match using adjusted ratings.
+        chaos_factor compresses the rating difference toward the mean,
+        simulating the higher upset rate historically seen in KO rounds.
+        Host bonus is applied AFTER compression so it's never diluted.
+        """
         from src.models.poisson import expected_goals, match_probabilities
         from src.models.base import MatchPrediction
+
+        # Base ratings + manual adjustments (no host bonus yet)
         rH = self.get_rating(home)
         rA = self.get_rating(away)
+
+        # Compress difference toward the mean (chaos_factor)
+        mid = (rH + rA) / 2
+        rH = mid + (rH - mid) * (1 - self.chaos_factor)
+        rA = mid + (rA - mid) * (1 - self.chaos_factor)
+
+        # Host bonus applied AFTER compression
+        rH += HOST_BONUS.get(home, 0.0)
+        rA += HOST_BONUS.get(away, 0.0)
+
         bonus = 0.0 if neutral else self.base.elo.home_advantage
         lh, la = expected_goals(rH, rA, home_advantage=bonus)
         ph, pd, pa = match_probabilities(lh, la)
         return MatchPrediction(round(ph,4), round(pd,4), round(pa,4), round(lh,2), round(la,2))
 
+    @property
+    def elo(self):
+        return self.base.elo
+
+
 # ── Request models for POST endpoints ────────────────────────────────────────
+
 class ExtraResult(PydanticModel):
     home: str
     away: str
@@ -124,6 +150,7 @@ class PredictRequest(PydanticModel):
     away_adjust: float = 0.0
     extra_results: list[ExtraResult] = []
     use_extra: bool = False
+    chaos_factor: float = 0.0  # 0.0 = pure model, 0.4 = maximum chaos
 
 
 def build_model_with_extra(extra_results: list[ExtraResult]) -> PoissonModel:
@@ -198,16 +225,22 @@ def predict(
     home: str = Query(...),
     away: str = Query(...),
     knockout: bool = Query(False),
-    home_adjust: float = Query(0.0),   # rating adjustment for home team
-    away_adjust: float = Query(0.0),   # rating adjustment for away team
+    home_adjust: float = Query(0.0),
+    away_adjust: float = Query(0.0),
+    chaos_factor: float = Query(0.0),  # 0.0 = pure model, 0.4 = maximum chaos
 ):
     """
     Predict a single match. Neutral ground assumed (World Cup).
     home_adjust / away_adjust: temporary rating deltas (injuries, form, etc.)
     that apply ONLY to this prediction, without changing the base model.
+    chaos_factor: compresses Elo difference to simulate KO upset rates.
     """
     base = STATE["poisson"]
-    model = AdjustedModel(base, {home: home_adjust, away: away_adjust})
+    model = AdjustedModel(
+        base,
+        {home: home_adjust, away: away_adjust},
+        chaos_factor=chaos_factor,
+    )
 
     if knockout:
         k = predict_knockout(model, home, away)
@@ -266,6 +299,7 @@ def groups():
     """Return the WC2026 group assignments."""
     return {"groups": GROUPS}
 
+
 @app.get("/api/simulation")
 def simulation():
     """Return tournament simulation: P(each team reaches each stage)."""
@@ -287,26 +321,33 @@ def simulation():
     teams.sort(key=lambda t: t["champion"], reverse=True)
     return {"teams": teams}
 
+
 @app.post("/api/predict")
 def predict_post(req: PredictRequest):
     """
     Predict a match, optionally applying extra real results to the model first.
     Used by the Fixture feature: when use_extra is true, the model is
     retrained with the tournament results the user has entered.
+    chaos_factor compresses Elo difference to simulate KO upset rates.
     """
     if req.use_extra and req.extra_results:
         base = build_model_with_extra(req.extra_results)
     else:
         base = STATE["poisson"]
 
-    model = AdjustedModel(base, {req.home: req.home_adjust, req.away: req.away_adjust})
+    model = AdjustedModel(
+        base,
+        {req.home: req.home_adjust, req.away: req.away_adjust},
+        chaos_factor=req.chaos_factor,
+    )
 
     if req.knockout:
         k = predict_knockout(model, req.home, req.away)
         return {
             "type": "knockout", "home": req.home, "away": req.away,
             "p90": {"home": k.p90_a, "draw": k.p90_draw, "away": k.p90_b},
-            "extra_time": {"home": k.pet_a, "draw": k.pet_draw, "away": k.pet_b, "reached": k.p_et},
+            "extra_time": {"home": k.pet_a, "draw": k.pet_draw, "away": k.pet_b,
+                           "reached": k.p_et},
             "penalties": {"home": k.ppen_a, "away": k.ppen_b, "reached": k.p_pens},
             "overall": {"home": k.p_a_wins, "away": k.p_b_wins},
             "xg": {"home": k.xg_a, "away": k.xg_b},
@@ -321,7 +362,9 @@ def predict_post(req: PredictRequest):
             "scorelines": _scorelines_per_outcome(model, req.home, req.away),
         }
 
+
 # ── SERVE FRONTEND ────────────────────────────────────────────────────────────
+
 @app.get("/")
 def index():
     return FileResponse(WEB_DIR / "index.html")
