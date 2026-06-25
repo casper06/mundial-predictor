@@ -87,10 +87,11 @@ class AdjustedModel:
     for specific teams. Does NOT modify the underlying model.
     Used for hypothetical scenarios (injuries, current form, etc.)
     """
-    def __init__(self, base_model, adjustments: dict[str, float], chaos_factor: float = 0.0):
+    def __init__(self, base_model, adjustments: dict[str, float], chaos_factor: float = 0.0, underdog_boost: bool = False):
         self.base = base_model
         self.adjustments = adjustments
-        self.chaos_factor = chaos_factor  # 0.0 = pure model, 0.4 = maximum chaos
+        self.chaos_factor = chaos_factor      # 0.0 = pure model, 0.4 = maximum chaos
+        self.underdog_boost = underdog_boost  # proportional boost to the weaker teams
 
     def get_rating(self, team: str) -> float:
         """Raw adjusted rating WITHOUT host bonus (used internally)."""
@@ -119,6 +120,15 @@ class AdjustedModel:
         mid = (rH + rA) / 2
         rH = mid + (rH - mid) * (1 - self.chaos_factor)
         rA = mid + (rA - mid) * (1 - self.chaos_factor)
+
+        # Underdog boost: proportional to Elo gap, capped at 80 pts
+        if self.underdog_boost:
+            diff = abs(rH - rA)
+            boost = min(diff * 0.2, 80)
+            if rH < rA:
+                rH += boost
+            else:
+                rA += boost
 
         # Host bonus applied AFTER compression
         rH += HOST_BONUS.get(home, 0.0)
@@ -150,7 +160,8 @@ class PredictRequest(PydanticModel):
     away_adjust: float = 0.0
     extra_results: list[ExtraResult] = []
     use_extra: bool = False
-    chaos_factor: float = 0.0  # 0.0 = pure model, 0.4 = maximum chaos
+    chaos_factor: float = 0.0      # 0.0 = pure model, 0.4 = maximum chaos
+    underdog_boost: bool = False    # applies proportional boost to the weaker team
 
 
 def build_model_with_extra(extra_results: list[ExtraResult]) -> PoissonModel:
@@ -240,6 +251,7 @@ def predict(
         base,
         {home: home_adjust, away: away_adjust},
         chaos_factor=chaos_factor,
+        underdog_boost=False,  # GET endpoint no soporta underdog_boost
     )
 
     if knockout:
@@ -339,6 +351,7 @@ def predict_post(req: PredictRequest):
         base,
         {req.home: req.home_adjust, req.away: req.away_adjust},
         chaos_factor=req.chaos_factor,
+        underdog_boost=req.underdog_boost,
     )
 
     if req.knockout:

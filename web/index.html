@@ -506,6 +506,17 @@
           <button class="adjust-reset" onclick="resetAdjust()">Reset to neutral</button>
         </div>
 
+        <div id="underdog-toggle-wrap" style="display:none;margin-bottom:12px">
+          <label class="feed-toggle" style="cursor:pointer">
+            <input type="checkbox" id="underdog-toggle" onchange="onUnderdogToggle()">
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            <div class="feed-toggle-text">
+              <span class="feed-toggle-title">Underdog boost</span>
+              <span class="feed-toggle-sub" id="underdog-sub">Boosts the weaker team — knockout only</span>
+            </div>
+          </label>
+        </div>
+
         <button class="predict-btn" onclick="runPrediction()">Run prediction</button>
       </div>
     </div>
@@ -882,6 +893,7 @@ function setMatchType(type) {
   matchType = type;
   document.getElementById('mt-group').classList.toggle('active', type==='group');
   document.getElementById('mt-knockout').classList.toggle('active', type==='knockout');
+  updateUnderdogToggle();
 }
 
 // ── ADJUST PANEL ────────────────────────────────────────────────────────────────
@@ -973,7 +985,8 @@ function runPrediction() {
       home, away, knockout: isKnockout,
       home_adjust: adjHome, away_adjust: adjAway,
       use_extra: useExtra, extra_results: extraResults,
-      chaos_factor: chaosEnabled ? 0.3 : 0.0
+      chaos_factor: chaosEnabled ? 0.3 : 0.0,
+      underdog_boost: underdogEnabled && matchType === 'knockout'
     })
   })
     .then(res => { if (!res.ok) throw new Error('API error'); return res.json(); })
@@ -982,6 +995,7 @@ function runPrediction() {
       else renderKnockoutResultFromAPI(home, away, data);
     showFeedBadge(useExtra && extraResults.length > 0);
     showChaosBadge();
+    showUnderdogBadge(home, away);
     })
     .catch(() => {
       // Fallback: compute in browser (file mode / API down)
@@ -1007,6 +1021,19 @@ function showChaosBadge() {
   const badge = document.createElement('div');
   badge.style.cssText = 'font-size:10px;color:#e05c5c;text-align:center;margin-top:6px;letter-spacing:0.05em';
   badge.textContent = '⚡ Chaos mode active — upsets more likely';
+  content.appendChild(badge);
+}
+
+function showUnderdogBadge(home, away) {
+  if (!underdogEnabled || matchType !== 'knockout') return;
+  const rH = getRating(home);
+  const rA = getRating(away);
+  const underdog = rH < rA ? home : away;
+  const boost = Math.round(Math.min(Math.abs(rH - rA) * 0.2, 80));
+  const content = document.getElementById('result-content');
+  const badge = document.createElement('div');
+  badge.style.cssText = 'font-size:10px;color:#f59e0b;text-align:center;margin-top:6px;letter-spacing:0.05em';
+  badge.textContent = `🐉 Underdog boost active — ${underdog} +${boost} pts`;
   content.appendChild(badge);
 }
 
@@ -1468,6 +1495,35 @@ loadFixtureState();
 renderFixture();
 const feedToggleEl = document.getElementById('feed-toggle');
 if (feedToggleEl) feedToggleEl.checked = feedEnabled;
+// ── UNDERDOG BOOST ───────────────────────────────────────────────────────────────
+let underdogEnabled = false;
+
+function onUnderdogToggle() {
+  underdogEnabled = document.getElementById('underdog-toggle').checked;
+}
+
+function updateUnderdogToggle() {
+  const wrap = document.getElementById('underdog-toggle-wrap');
+  const sub = document.getElementById('underdog-sub');
+  if (!wrap) return;
+  if (matchType !== 'knockout') {
+    wrap.style.display = 'none';
+    return;
+  }
+  const home = document.getElementById('team-home').value;
+  const away = document.getElementById('team-away').value;
+  const rH = getRating(home);
+  const rA = getRating(away);
+  const diff = Math.abs(rH - rA);
+  const underdog = rH < rA ? home : away;
+  const boost = Math.round(Math.min(diff * 0.2, 80));
+  wrap.style.display = 'block';
+  sub.textContent = `+${boost} Elo pts to ${underdog} · knockout only`;
+}
+
+// Re-evaluate toggle whenever teams or match type change
+document.getElementById('team-home').addEventListener('change', updateUnderdogToggle);
+document.getElementById('team-away').addEventListener('change', updateUnderdogToggle);
 // ── CHAOS MODE ──────────────────────────────────────────────────────────────────
 const CHAOS_KEY = 'wc26_chaos';
 let chaosEnabled = false;

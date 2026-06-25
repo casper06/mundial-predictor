@@ -49,12 +49,23 @@ def predict_knockout(model: PoissonModel,
     """
     ra = model.get_rating(team_a)
     rb = model.get_rating(team_b)
+
     # Apply chaos_factor if present (compresses Elo difference toward mean)
     chaos = getattr(model, 'chaos_factor', 0.0)
     if chaos:
         mid = (ra + rb) / 2
         ra = mid + (ra - mid) * (1 - chaos)
         rb = mid + (rb - mid) * (1 - chaos)
+
+    # Apply underdog_boost if present (proportional boost to weaker team, capped at 80pts)
+    if getattr(model, 'underdog_boost', False):
+        diff = abs(ra - rb)
+        boost = min(diff * 0.2, 80)
+        if ra < rb:
+            ra += boost
+        else:
+            rb += boost
+
     # ── 90 minutes ────────────────────────────────────────────────────────
     lam_a90, lam_b90 = expected_goals(ra, rb, home_advantage=0)
     p90_a, p90_draw, p90_b = match_probabilities(lam_a90, lam_b90)
