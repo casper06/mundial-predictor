@@ -281,29 +281,38 @@ def predict(
 
 
 def _scorelines_per_outcome(model, home, away):
-    """Best scoreline for each outcome (home win / draw / away win)."""
-    import math
+    """Average scoreline for each outcome (home win / draw / away win)."""
     from src.models.poisson import expected_goals, poisson_prob, MAX_GOALS
     rH = model.get_rating(home)
     rA = model.get_rating(away)
     lh, la = expected_goals(rH, rA, home_advantage=0)
 
-    best = {"home": ("", -1), "draw": ("", -1), "away": ("", -1)}
+    totals = {"home": [0.0, 0.0, 0.0], "draw": [0.0, 0.0, 0.0], "away": [0.0, 0.0, 0.0]}
+    # totals[outcome] = [sum_p, sum_i*p, sum_j*p]
+
     for i in range(MAX_GOALS + 1):
         for j in range(MAX_GOALS + 1):
             p = poisson_prob(lh, i) * poisson_prob(la, j)
-            if i > j and p > best["home"][1]:
-                best["home"] = (f"{i}-{j}", p)
-            elif i == j and p > best["draw"][1]:
-                best["draw"] = (f"{i}-{j}", p)
-            elif i < j and p > best["away"][1]:
-                best["away"] = (f"{i}-{j}", p)
+            if i > j:
+                key = "home"
+            elif i == j:
+                key = "draw"
+            else:
+                key = "away"
+            totals[key][0] += p
+            totals[key][1] += i * p
+            totals[key][2] += j * p
 
-    return {
-        "home": {"score": best["home"][0], "prob": round(best["home"][1], 4)},
-        "draw": {"score": best["draw"][0], "prob": round(best["draw"][1], 4)},
-        "away": {"score": best["away"][0], "prob": round(best["away"][1], 4)},
-    }
+    result = {}
+    for key, (total_p, sum_i, sum_j) in totals.items():
+        if total_p > 0:
+            avg_i = round(sum_i / total_p)
+            avg_j = round(sum_j / total_p)
+            result[key] = {"score": f"{avg_i}-{avg_j}", "prob": round(total_p, 4)}
+        else:
+            result[key] = {"score": "0-0", "prob": 0.0}
+
+    return result
 
 
 @app.get("/api/groups")
