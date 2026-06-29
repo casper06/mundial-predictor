@@ -1060,11 +1060,11 @@ function renderGroupResultFromAPI(home, away, data) {
     </div>
     <div class="xg-row"><span class="xg-label">Expected goals</span><span class="xg-values">${lH.toFixed(2)} &mdash; ${lA.toFixed(2)}</span></div>
     <div>
-      <div class="stage-title" style="margin-bottom:10px">Most likely score per outcome</div>
+    <div class="stage-title" style="margin-bottom:10px">Expected score per outcome</div>
       <div class="scorelines">
-        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${sc.home.score}</span><span class="sc-pct">${(sc.home.prob*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">Draw: ${sc.draw.score}</span><span class="sc-pct">${(sc.draw.prob*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${sc.away.score}</span><span class="sc-pct">${(sc.away.prob*100).toFixed(1)}%</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${sc.home.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">Draw: ${sc.draw.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${sc.away.score}</span></div>
       </div>
     </div>`;
   animateBars();
@@ -1098,11 +1098,11 @@ function renderKnockoutResultFromAPI(home, away, data) {
       <div class="stage-title"><span>Penalty Shootout</span><span class="stage-prob-tag">reached ${(pen.reached*100).toFixed(0)}% of the time</span></div>
       <div class="prob-bars">${probRow(home,'win',pen.home)}${probRow(away,'loss',pen.away)}</div>
     </div>
-    <div style="margin-top:4px"><div class="stage-title" style="margin-bottom:10px">Most likely score per outcome (90 min)</div>
+    <div style="margin-top:4px"><div class="stage-title" style="margin-bottom:10px">Expected score per outcome (90 min)</div>
       <div class="scorelines">
-        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${sc.home.score}</span><span class="sc-pct">${(sc.home.prob*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">Draw: ${sc.draw.score}</span><span class="sc-pct">${(sc.draw.prob*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${sc.away.score}</span><span class="sc-pct">${(sc.away.prob*100).toFixed(1)}%</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${sc.home.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">Draw: ${sc.draw.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${sc.away.score}</span></div>
       </div>
     </div>`;
   animateBars();
@@ -1134,11 +1134,11 @@ function renderGroupResult(home, away, adjHome=0, adjAway=0) {
     </div>
     <div class="xg-row"><span class="xg-label">Expected goals</span><span class="xg-values">${lH.toFixed(2)} &mdash; ${lA.toFixed(2)}</span></div>
     <div>
-      <div class="stage-title" style="margin-bottom:10px">Most likely score per outcome</div>
+      <div class="stage-title" style="margin-bottom:10px">Expected score per outcome</div>
       <div class="scorelines">
-        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${best.home.score}</span><span class="sc-pct">${(best.home.p*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">Draw: ${best.draw.score}</span><span class="sc-pct">${(best.draw.p*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${best.away.score}</span><span class="sc-pct">${(best.away.p*100).toFixed(1)}%</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${best.home.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">Draw: ${best.draw.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${best.away.score}</span></div>
       </div>
     </div>`;
 
@@ -1201,11 +1201,11 @@ function renderKnockoutResult(home, away, adjHome=0, adjAway=0) {
       </div>
     </div>
 
-    <div style="margin-top:4px"><div class="stage-title" style="margin-bottom:10px">Most likely score per outcome (90 min)</div>
+    <div style="margin-top:4px"><div class="stage-title" style="margin-bottom:10px">Expected score per outcome (90 min)</div>
       <div class="scorelines">
-        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${best.home.score}</span><span class="sc-pct">${(best.home.p*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">Draw: ${best.draw.score}</span><span class="sc-pct">${(best.draw.p*100).toFixed(1)}%</span></div>
-        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${best.away.score}</span><span class="sc-pct">${(best.away.p*100).toFixed(1)}%</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${home} wins: ${best.home.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">Draw: ${best.draw.score}</span></div>
+        <div class="scoreline-chip"><span class="sc-score">${away} wins: ${best.away.score}</span></div>
       </div>
     </div>`;
 
