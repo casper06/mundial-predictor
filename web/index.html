@@ -204,6 +204,15 @@
   .scoreline-chip .sc-score { color: var(--text); }
   .scoreline-chip .sc-pct { color: var(--gold); margin-left: 6px; font-weight: 600; }
 
+  .ko-penalties { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .ko-pen-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); cursor: pointer; }
+  .ko-pen-toggle input { accent-color: var(--gold); }
+  .ko-pen-score { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .ko-pen-side { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .ko-pen-side .ko-pen-team { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ko-pen-score input { width: 58px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 8px 10px; }
+  .ko-pen-score span { color: var(--muted); font-size: 12px; }
+
   .overall-bar { display: flex; height: 44px; border-radius: 12px; overflow: hidden; margin-bottom: 8px; border: 1px solid var(--border); }
   .overall-seg { display: flex; align-items: center; justify-content: center; font-family: 'Clash Display', sans-serif; font-size: 14px; font-weight: 700; color: #fff; transition: flex-basis 0.9s var(--ease-expo); min-width: 0; overflow: hidden; white-space: nowrap; }
   .overall-seg.a { background: linear-gradient(135deg, var(--green), var(--green-lit)); }
@@ -1437,7 +1446,11 @@ function getExtraResults() {
   for (const k of KNOCKOUT) {
     const st = koState[k.m];
     if (st && st.home && st.away && st.hg != null && st.ag != null) {
-      out.push({ home: st.home, away: st.away, home_goals: st.hg, away_goals: st.ag });
+      const payload = { home: st.home, away: st.away, home_goals: st.hg, away_goals: st.ag };
+      if (st.penalties && st.pen_hg != null && st.pen_ag != null) {
+        payload.shootout = { home_goals: st.pen_hg, away_goals: st.pen_ag };
+      }
+      out.push(payload);
     }
   }
   return out;
@@ -1599,7 +1612,11 @@ function candidatesForSlot(slot, standings) {
     let suggested = null;
     if (st && st.home && st.away && st.hg!=null && st.ag!=null) {
       const isWinner = slot[0]==='W';
-      if (st.hg !== st.ag) suggested = (st.hg>st.ag) === isWinner ? st.home : st.away;
+      if (st.penalties && st.pen_hg != null && st.pen_ag != null) {
+        if (st.pen_hg !== st.pen_ag) suggested = (st.pen_hg>st.pen_ag) === isWinner ? st.home : st.away;
+      } else if (st.hg !== st.ag) {
+        suggested = (st.hg>st.ag) === isWinner ? st.home : st.away;
+      }
     }
     return { suggested, list: allWcTeams() };
   }
@@ -1652,6 +1669,7 @@ function renderKnockout() {
             </div>
             <input type="number" min="0" max="99" class="ko-score-input ${st.ag!=null?'filled':''}" value="${st.ag!=null?st.ag:''}" data-ko="${k.m}" data-side="ag" oninput="onKoScore(this)">
           </div>
+          ${renderKoPenaltiesRow(k.m, st)}
         </div>`;
     }
     html += `</div></div>`;
@@ -1670,6 +1688,58 @@ function koSelect(matchNo, side, slot, selected, standings) {
   return `<select class="ko-select ${selected?'':'empty'}" data-ko="${matchNo}" data-side="${side}" onchange="onKoTeam(this)">${opts.join('')}</select>`;
 }
 
+function renderKoPenaltiesRow(matchNo, st) {
+  const tied = st.hg != null && st.ag != null && st.hg === st.ag;
+  if (!tied) return '';
+  const checked = !!st.penalties;
+  const penHg = st.pen_hg != null ? st.pen_hg : '';
+  const penAg = st.pen_ag != null ? st.pen_ag : '';
+  return `
+    <div class="ko-penalties">
+      <label class="ko-pen-toggle">
+        <input type="checkbox" ${checked ? 'checked' : ''} data-ko="${matchNo}" onchange="onKoPenaltiesToggle(this)">
+        <span>Penalties</span>
+      </label>
+      ${checked ? `
+        <div class="ko-pen-score">
+          <div class="ko-pen-side">
+            <span class="ko-pen-flag">${flagImg(st.home, 16)}</span>
+            <span class="ko-pen-team">${st.home || 'Home'}</span>
+            <input type="number" min="0" max="99" value="${penHg}" data-ko="${matchNo}" data-side="pen_hg" oninput="onKoPenaltyScore(this)">
+          </div>
+          <span>-</span>
+          <div class="ko-pen-side">
+            <input type="number" min="0" max="99" value="${penAg}" data-ko="${matchNo}" data-side="pen_ag" oninput="onKoPenaltyScore(this)">
+            <span class="ko-pen-team">${st.away || 'Away'}</span>
+            <span class="ko-pen-flag">${flagImg(st.away, 16)}</span>
+          </div>
+        </div>` : ''}
+    </div>`;
+}
+
+function onKoPenaltiesToggle(cb) {
+  const m = cb.dataset.ko;
+  if (!koState[m]) koState[m] = {};
+  koState[m].penalties = cb.checked;
+  if (!cb.checked) {
+    delete koState[m].pen_hg;
+    delete koState[m].pen_ag;
+  }
+  saveKoState();
+  renderKnockout();
+}
+
+function onKoPenaltyScore(input) {
+  const m = input.dataset.ko;
+  const side = input.dataset.side;
+  const val = input.value === '' ? null : Math.max(0, Math.min(99, parseInt(input.value)));
+  if (!koState[m]) koState[m] = {};
+  koState[m].penalties = true;
+  koState[m][side] = val;
+  saveKoState();
+  renderKnockout();
+}
+
 function onKoTeam(sel) {
   const m = sel.dataset.ko, side = sel.dataset.side;
   if (!koState[m]) koState[m] = {};
@@ -1683,6 +1753,12 @@ function onKoScore(input) {
   if (!koState[m]) koState[m] = {};
   koState[m][side] = val;
   input.classList.toggle('filled', val!=null);
+  const st = koState[m];
+  if (st.hg == null || st.ag == null || st.hg !== st.ag) {
+    delete st.penalties;
+    delete st.pen_hg;
+    delete st.pen_ag;
+  }
   saveKoState();
   renderKnockout();  // re-render so downstream suggestions update
 }

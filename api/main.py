@@ -10,6 +10,8 @@ Run from the project root:
 
 Then open http://localhost:8000
 """
+import csv
+from datetime import date
 from pathlib import Path
 from pydantic import BaseModel as PydanticModel
 from copy import deepcopy
@@ -146,11 +148,16 @@ class AdjustedModel:
 
 # ── Request models for POST endpoints ────────────────────────────────────────
 
+class ShootoutResult(PydanticModel):
+    home_goals: int
+    away_goals: int
+
 class ExtraResult(PydanticModel):
     home: str
     away: str
     home_goals: int
     away_goals: int
+    shootout: ShootoutResult | None = None
 
 class PredictRequest(PydanticModel):
     home: str
@@ -179,6 +186,40 @@ def build_model_with_extra(extra_results: list[ExtraResult]) -> PoissonModel:
             neutral=True,
         )
     return PoissonModel(elo)
+
+
+def append_shootout_results(extra_results: list[ExtraResult]) -> None:
+    """Append shootout results to the historical shootouts CSV when requested."""
+    path = ROOT / "data" / "raw" / "shootouts.csv"
+    if not extra_results:
+        return
+
+    rows = []
+    for result in extra_results:
+        shootout = result.shootout
+        if not shootout:
+            continue
+        if shootout.home_goals is None or shootout.away_goals is None:
+            continue
+        if shootout.home_goals == shootout.away_goals:
+            continue
+        winner = result.home if shootout.home_goals > shootout.away_goals else result.away
+        rows.append({
+            "date": date.today().isoformat(),
+            "home_team": result.home,
+            "away_team": result.away,
+            "winner": winner,
+        })
+
+    if not rows:
+        return
+
+    write_header = not path.exists() or path.stat().st_size == 0
+    with path.open("a", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["date", "home_team", "away_team", "winner"])
+        if write_header:
+            writer.writeheader()
+        writer.writerows(rows)
 
 app = FastAPI(title="World Cup 2026 Predictor")
 
@@ -352,6 +393,7 @@ def predict_post(req: PredictRequest):
     chaos_factor compresses Elo difference to simulate KO upset rates.
     """
     if req.use_extra and req.extra_results:
+        append_shootout_results(req.extra_results)
         base = build_model_with_extra(req.extra_results)
     else:
         base = STATE["poisson"]
